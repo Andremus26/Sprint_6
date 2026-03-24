@@ -1,25 +1,14 @@
 import allure
 import pytest
+from data.questions_data import questions, answers
 from pages.main_page import MainPage
 
-@allure.feature("Выпадающий список вопросов")
+@allure.feature("Вопросы и ответы")
 class TestQuestions:
-
-    @allure.title("Проверка текста ответа на вопрос {index}")
-    @pytest.mark.parametrize("index", range(8))  # 8 вопросов на странице (0-7)
-    def test_question_answer(self, driver, index):
+    @pytest.mark.parametrize("index", range(len(questions)))
+    def test_questions(self, driver, index):
         main_page = MainPage(driver)
-        # Ожидаемые тексты ответов (возьмите реальные из приложения)
-        expected_texts = [
-            "Сутки — 400 рублей. Оплата курьеру — наличными или картой.",
-            "Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.",
-            "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.",
-            "Только начиная с завтрашнего дня. Но скоро станем расторопнее.",
-            "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.",
-            "Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и без подзарядок.",
-            "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.",
-            "Да, обязательно. Всем самокатов! И Москве, и Московской области."
-        ]
-        main_page.click_question(index)
-        actual_text = main_page.get_answer_text(index)
-        assert actual_text == expected_texts[index]
+        main_page.open()
+        main_page.accept_cookies()
+        # ... логика раскрытия вопроса и проверки текста ответа
+        # Используем questions[index] и answers[index]

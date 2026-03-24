@@ -1,4 +1,5 @@
-from selenium.webdriver.support.wait import WebDriverWait
+import allure
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class BasePage:
@@ -6,17 +7,18 @@ class BasePage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
+    @allure.step("Открыть страницу {url}")
+    def open(self, url):
+        self.driver.get(url)
+
+    @allure.step("Найти элемент {locator}")
     def find_element(self, locator):
-        return self.wait.until(EC.presence_of_element_located(locator))
+        return self.driver.find_element(*locator)
 
+    @allure.step("Кликнуть на элемент {locator}")
     def click_element(self, locator):
-        element = self.wait.until(EC.element_to_be_clickable(locator))
-        element.click()
+        self.find_element(locator).click()
 
-    def send_keys(self, locator, text):
-        element = self.find_element(locator)
-        element.clear()
-        element.send_keys(text)
-
-    def get_text(self, locator):
-        return self.find_element(locator).text
+    @allure.step("Ожидать URL {expected_url}")
+    def wait_for_url(self, expected_url):
+        self.wait.until(EC.url_to_be(expected_url))
